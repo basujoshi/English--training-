@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0b1220">
+<title>English Journey — Learn English Step by Step</title>
+<style>
+:root{
+  --bg:#f4f7fb;--card:#fff;--text:#172033;--muted:#667085;--primary:#2563eb;
+  --primary2:#1d4ed8;--line:#e6eaf0;--good:#16a34a;--warn:#f59e0b;--dark:#0b1220;
+  --shadow:0 12px 35px rgba(15,23,42,.08);--radius:22px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.app{min-height:100vh}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(11,18,32,.96);color:white;border-bottom:1px solid rgba(255,255,255,.08)}
+.topbar-inner{max-width:1180px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:18px}
+.logo{font-weight:900;font-size:20px;letter-spacing:-.4px;white-space:nowrap}
+.logo span{color:#60a5fa}
+.nav{display:flex;gap:5px;margin-left:auto}
+.nav button{background:transparent;color:#cbd5e1;padding:10px 13px;border-radius:12px;font-weight:700}
+.nav button.active,.nav button:hover{background:#1e293b;color:#fff}
+.menu-btn{display:none;background:#172033;color:#fff;padding:10px 12px;border-radius:12px}
+main{max-width:1180px;margin:auto;padding:26px 18px 50px}
+.view{display:none}.view.active{display:block}
+.hero{background:linear-gradient(135deg,#0b1220,#172554 58%,#2563eb);color:#fff;border-radius:28px;padding:32px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-90px;top:-120px;background:rgba(96,165,250,.18)}
+.hero-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:25px;align-items:center;position:relative;z-index:1}
+.eyebrow{text-transform:uppercase;letter-spacing:1.6px;font-size:12px;font-weight:900;color:#93c5fd}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.02;margin:10px 0 14px;letter-spacing:-1.8px}
+h2{margin:0 0 10px;font-size:27px}h3{margin:0 0 7px}
+.hero p{color:#dbeafe;max-width:700px;line-height:1.65}
+.primary{background:var(--primary);color:#fff;padding:13px 18px;border-radius:13px;font-weight:800;box-shadow:0 8px 18px rgba(37,99,235,.2)}
+.primary:hover{background:var(--primary2)}
+.secondary{background:#fff;color:#172033;padding:12px 17px;border-radius:13px;font-weight:800;border:1px solid var(--line)}
+.ghost{background:#eef2f7;color:#172033;padding:11px 15px;border-radius:12px;font-weight:800}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:18px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.stat strong{display:block;font-size:25px}.stat span{color:var(--muted);font-size:13px;font-weight:700}
+.section{margin-top:27px}.section-head{display:flex;justify-content:space-between;gap:15px;align-items:end;margin-bottom:13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:21px;box-shadow:var(--shadow)}
+.card p{color:var(--muted);line-height:1.55}
+.lang-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lang{padding:15px;border:1px solid var(--line);background:#fff;border-radius:15px;text-align:left;font-weight:800}
+.lang.active{border:2px solid var(--primary);background:#eff6ff;color:var(--primary)}
+.progress{height:10px;background:#e8edf4;border-radius:999px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:inherit}
+.course-list{display:grid;gap:12px}
+.lesson-row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);padding:17px;border-radius:18px}
+.lesson-num{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eaf1ff;color:var(--primary);font-weight:900;flex:none}
+.lesson-row.locked{opacity:.55}.lesson-row.done .lesson-num{background:#dcfce7;color:var(--good)}
+.lesson-info{flex:1}.lesson-info strong{display:block}.lesson-info span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.pill{display:inline-flex;align-items:center;gap:5px;background:#eef2ff;color:#4338ca;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:900}
+.lesson-shell{max-width:850px;margin:0 auto}
+.lesson-top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:15px}
+.lesson-progress{display:flex;gap:5px;margin:13px 0 22px}.lesson-progress i{height:5px;flex:1;background:#dbe2ea;border-radius:99px}.lesson-progress i.on{background:var(--primary)}
+.teach-word{font-size:44px;font-weight:950;letter-spacing:-1px;margin:12px 0}.pron{color:var(--primary);font-weight:800}
+.meaning{background:#f8fafc;border:1px solid var(--line);padding:16px;border-radius:16px;margin:16px 0}
+.example{border-left:4px solid var(--primary);background:#f8fbff;padding:15px 17px;border-radius:0 14px 14px 0;margin:12px 0}
+.example strong{font-size:18px}.example small{display:block;color:var(--muted);margin-top:5px}
+.dialogue{display:grid;gap:10px;margin-top:15px}.bubble{padding:13px 15px;border-radius:16px;max-width:80%;background:#f1f5f9}.bubble.me{margin-left:auto;background:#dbeafe}
+.step-label{font-size:12px;font-weight:900;color:var(--primary);text-transform:uppercase;letter-spacing:1px}
+.big-input{width:100%;padding:15px;border:1px solid #cfd7e3;border-radius:14px;outline:none}.big-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.feedback{padding:13px;border-radius:14px;margin-top:12px;font-weight:700}.good{background:#dcfce7;color:#166534}.bad{background:#fee2e2;color:#991b1b}
+.check-options{display:grid;gap:10px}.check-options button{text-align:left;background:#fff;border:1px solid var(--line);padding:15px;border-radius:14px;font-weight:700}.check-options button:hover{border-color:var(--primary);background:#eff6ff}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+select,.text-input{padding:12px 13px;border:1px solid #cfd7e3;border-radius:12px;background:#fff}
+.translate-box{display:grid;grid-template-columns:1fr 1fr;gap:16px}.translate-box textarea{min-height:230px;resize:vertical;padding:16px;border:1px solid var(--line);border-radius:16px}
+.speak-target{font-size:27px;font-weight:900;background:#f8fafc;border:1px solid var(--line);padding:20px;border-radius:18px}
+.meter{height:12px;background:#e8edf4;border-radius:99px;overflow:hidden;margin:12px 0}.meter i{display:block;height:100%;width:0;background:var(--good)}
+.notice{padding:13px 15px;background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;color:#9a3412}
+@media(max-width:850px){
+ .nav{display:none;position:absolute;left:10px;right:10px;top:64px;background:#0b1220;padding:8px;border-radius:15px;box-shadow:0 15px 35px rgba(0,0,0,.25);flex-direction:column}.nav.open{display:flex}.menu-btn{display:block;margin-left:auto}
+ .hero-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr 1fr}.lang-grid{grid-template-columns:1fr 1fr}.translate-box{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+ main{padding:16px 12px 40px}.hero{padding:23px;border-radius:22px}.stats{gap:9px}.stat{padding:14px}.stat strong{font-size:21px}.grid{grid-template-columns:1fr}.lesson-row{padding:13px}.lesson-row .primary{padding:10px 12px}.teach-word{font-size:36px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+ <div class="topbar-inner">
+  <div class="logo">English<span>Journey</span></div>
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <nav class="nav" id="nav">
+   <button data-view="home" class="active">Home</button>
+   <button data-view="course">Course</button>
+   <button data-view="translator">Translator</button>
+   <button data-view="speak">Speak</button>
+   <button data-view="review">Review</button>
+   <button data-view="progress">Progress</button>
+   <button data-view="settings">Settings</button>
+  </nav>
+ </div>
+</header>
+
+<main>
+<section id="home" class="view active">
+ <div class="hero">
+  <div class="hero-grid">
+   <div>
+    <div class="eyebrow">Learn • Listen • Speak • Write</div>
+    <h1>Learn English from zero, one clear step at a time.</h1>
+    <p>First learn the word, understand it, hear it, use it in a sentence, speak it and write it. Practice comes after teaching.</p>
+    <div class="actions">
+     <button class="primary" id="continueBtn">▶ Continue Learning</button>
+     <button class="secondary" id="courseBtn">View Course</button>
+    </div>
+   </div>
+   <div class="card" style="color:#172033">
+    <div class="pill">CURRENT LESSON</div>
+    <h2 id="heroLesson">Lesson 1</h2>
+    <p id="heroObjective">Greetings and introductions.</p>
+    <div class="progress"><i id="heroProgress" style="width:0%"></i></div>
+    <small id="heroProgressText">0% complete</small>
+   </div>
+  </div>
+ </div>
+
+ <div class="stats">
+  <div class="stat"><strong id="xpStat">0</strong><span>XP</span></div>
+  <div class="stat"><strong id="streakStat">0</strong><span>Day streak</span></div>
+  <div class="stat"><strong id="doneStat">0</strong><span>Lessons done</span></div>
+  <div class="stat"><strong id="levelStat">Foundation</strong><span>Current level</span></div>
+ </div>
+
+ <div class="section">
+  <div class="section-head"><div><h2>Choose your language</h2><p style="margin:0;color:var(--muted)">Only your language + English will be shown in lessons.</p></div></div>
+  <div class="lang-grid" id="languageGrid"></div>
+ </div>
+
+ <div class="section">
+  <div class="section-head"><div><h2>How the course works</h2></div></div>
+  <div class="grid">
+   <div class="card"><div class="pill">01</div><h3>Learn</h3><p>New words, meaning, pronunciation and simple explanations.</p></div>
+   <div class="card"><div class="pill">02</div><h3>Use</h3><p>See the same English in easy sentences and real situations.</p></div>
+   <div class="card"><div class="pill">03</div><h3>Speak & Write</h3><p>Listen, repeat, speak and type before a small end-of-lesson check.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="course" class="view">
+ <div class="section-head"><div><div class="eyebrow">YOUR COURSE</div><h2>English Course Path</h2><p style="color:var(--muted)">Lessons unlock in order. Learn first; review later.</p></div></div>
+ <div class="card" style="margin-bottom:16px">
+  <h3>Foundation • Start from zero</h3>
+  <p>Greetings → Pronouns → am/is/are → numbers → time → question words → daily English.</p>
+  <div class="progress"><i id="courseFoundationProgress" style="width:0%"></i></div>
+ </div>
+ <div class="course-list" id="courseList"></div>
+ <div class="section">
+  <div class="card">
+   <h3>Next stages</h3>
+   <p><b>A1</b> Daily English → <b>A2</b> Everyday conversation → <b>B1</b> Fluency → <b>B2</b> Natural & professional English → <b>C1/C2</b> Advanced language → <b>Mastery</b>.</p>
+   <p class="notice">This starter app contains the foundation course data. The structure is designed so thousands or millions of lessons can later be loaded from Firebase/API instead of putting everything into one HTML file.</p>
+  </div>
+ </div>
+</section>
+
+<section id="lesson" class="view">
+ <div class="lesson-shell">
+  <div class="lesson-top"><button class="ghost" id="backCourse">← Course</button><span class="pill" id="lessonCounter">Lesson 1</span></div>
+  <div class="lesson-progress" id="lessonSteps"></div>
+  <div class="card" id="lessonCard"></div>
+ </div>
+</section>
+
+<section id="translator" class="view">
+ <div class="section-head"><div><div class="eyebrow">TOOLS</div><h2>Course Translator</h2><p style="color:var(--muted)">Translate phrases from the course language into English and back.</p></div></div>
+ <div class="card">
+  <div class="toolbar">
+   <select id="translatorMode"><option value="baseToEnglish">Your language → English</option><option value="englishToBase">English → Your language</option></select>
+   <button class="ghost" id="clearTranslator">Clear</button>
+  </div>
+  <div class="translate-box">
+   <textarea id="translateInput" placeholder="Type a course word or sentence..."></textarea>
+   <textarea id="translateOutput" readonly placeholder="Translation will appear here..."></textarea>
+  </div>
+  <div class="actions"><button class="primary" id="translateBtn">Translate</button><button class="secondary" id="speakTranslation">🔊 Listen</button></div>
+  <p class="notice" style="margin-top:15px">This offline translator uses the course phrase bank. Unlimited open-ended translation needs a translation API/backend.</p>
+ </div>
+</section>
+
+<section id="speak" class="view">
+ <div class="section-head"><div><div class="eyebrow">SPEAKING</div><h2>Speak Practice</h2><p style="color:var(--muted)">Listen first, then speak the English sentence.</p></div></div>
+ <div class="card">
+  <div class="pill">TARGET SENTENCE</div>
+  <div class="speak-target" id="speakTarget">Hello! What’s your name?</div>
+  <div class="actions"><button class="primary" id="listenSpeak">🔊 Listen</button><button class="primary" id="startSpeak">🎙 Start Speaking</button></div>
+  <p id="speechStatus" style="color:var(--muted)">Press Start Speaking and say the sentence.</p>
+  <div class="meter"><i id="speechMeter"></i></div>
+  <div id="speechResult"></div>
+  <p class="notice">The browser speech tool gives a basic word-match estimate. It is not a professional pronunciation assessment.</p>
+ </div>
+</section>
+
+<section id="review" class="view">
+ <div class="section-head"><div><div class="eyebrow">AFTER LEARNING</div><h2>Review</h2><p style="color:var(--muted)">Review becomes useful after you have learned several lessons.</p></div></div>
+ <div id="reviewContent"></div>
+</section>
+
+<section id="progress" class="view">
+ <div class="section-head"><div><div class="eyebrow">YOUR PROGRESS</div><h2>Learning Progress</h2></div></div>
+ <div class="grid" id="progressCards"></div>
+ <div class="section"><div class="card"><h3>Foundation progress</h3><div class="progress"><i id="progressBar" style="width:0%"></i></div><p id="progressText"></p></div></div>
+</section>
+
+<section id="settings" class="view">
+ <div class="section-head"><div><div class="eyebrow">SETTINGS</div><h2>Learning Settings</h2></div></div>
+ <div class="card">
+  <h3>Learning language</h3><div class="lang-grid" id="settingsLanguageGrid" style="margin-top:12px"></div>
+  <div style="margin-top:22px"><h3>Daily goal</h3><select id="goalSelect"><option value="10">10 minutes</option><option value="15">15 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option></select></div>
+  <div style="margin-top:22px"><h3>Speech speed</h3><input id="speedRange" type="range" min=".6" max="1.2" step=".1" value="0.9"><span id="speedValue">0.9×</span></div>
+  <div style="margin-top:25px"><button class="ghost" id="resetBtn">Reset learning progress</button></div>
+ </div>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+const lessons=[
+{
+ level:"Foundation", title:"Greetings & Introductions", objective:"Say hello, introduce yourself and ask someone’s name.",
+ teaching:[
+  {word:"Hello",pron:"heh-LOH",mean:{Hindi:"नमस्ते / हेलो",Nepali:"नमस्ते",Tamil:"வணக்கம்",English:"Hello"},sentence:"Hello! How are you?",sentenceMean:{Hindi:"नमस्ते! आप कैसे हैं?",Nepali:"नमस्ते! तपाईंलाई कस्तो छ?",Tamil:"வணக்கம்! நீங்கள் எப்படி இருக்கிறீர்கள்?",English:"Hello! How are you?"},context:"Hello! Nice to meet you.",contextMean:{Hindi:"नमस्ते! आपसे मिलकर खुशी हुई।",Nepali:"नमस्ते! तपाईंलाई भेटेर खुशी लाग्यो।",Tamil:"வணக்கம்! உங்களை சந்தித்ததில் மகிழ்ச்சி.",English:"Hello! Nice to meet you."}},
+  {word:"Name",pron:"NAYM",mean:{Hindi:"नाम",Nepali:"नाम",Tamil:"பெயர்",English:"Name"},sentence:"My name is Ravi.",sentenceMean:{Hindi:"मेरा नाम रवि है।",Nepali:"मेरो नाम रवि हो।",Tamil:"என் பெயர் ரவி.",English:"My name is Ravi."},context:"What is your name?",contextMean:{Hindi:"आपका नाम क्या है?",Nepali:"तपाईंको नाम के हो?",Tamil:"உங்கள் பெயர் என்ன?",English:"What is your name?"}},
+  {word:"Nice",pron:"NICE",mean:{Hindi:"अच्छा / खुशी",Nepali:"राम्रो / खुशी",Tamil:"நல்ல / மகிழ்ச்சி",English:"Pleasant / good"},sentence:"Nice to meet you.",sentenceMean:{Hindi:"आपसे मिलकर खुशी हुई।",Nepali:"तपाईंलाई भेटेर खुशी लाग्यो।",Tamil:"உங்களை சந்தித்ததில் மகிழ்ச்சி.",English:"Nice to meet you."},context:"It is nice to see you.",contextMean:{Hindi:"आपको देखकर खुशी हुई।",Nepali:"तपाईंलाई देखेर खुशी लाग्यो।",Tamil:"உங்களைப் பார்த்ததில் மகிழ்ச்சி.",English:"It is nice to see you."}},
+  {word:"From",pron:"FROM",mean:{Hindi:"से / से आया हुआ",Nepali:"बाट / देखि",Tamil:"இருந்து",English:"From"},sentence:"I am from Nepal.",sentenceMean:{Hindi:"मैं नेपाल से हूँ।",Nepali:"म नेपालबाट हुँ।",Tamil:"நான் நேபாளத்திலிருந்து வந்தவன்.",English:"I am from Nepal."},context:"Where are you from?",contextMean:{Hindi:"आप कहाँ से हैं?",Nepali:"तपाईं कहाँबाट हुनुहुन्छ?",Tamil:"நீங்கள் எங்கிருந்து வருகிறீர்கள்?",English:"Where are you from?"}}
+ ],
+ conversation:[
+  {s:"A",e:"Hello! What’s your name?",m:{Hindi:"नमस्ते! आपका नाम क्या है?",Nepali:"नमस्ते! तपाईंको नाम के हो?",Tamil:"வணக்கம்! உங்கள் பெயர் என்ன?",English:"Hello! What’s your name?"}},
+  {s:"B",e:"My name is Ravi. What’s your name?",m:{Hindi:"मेरा नाम रवि है। आपका नाम क्या है?",Nepali:"मेरो नाम रवि हो। तपाईंको नाम के हो?",Tamil:"என் பெயர் ரவி. உங்கள் பெயர் என்ன?",English:"My name is Ravi. What’s your name?"}},
+  {s:"A",e:"I’m Alex. Nice to meet you.",m:{Hindi:"मैं एलेक्स हूँ। आपसे मिलकर खुशी हुई।",Nepali:"म एलेक्स हुँ। तपाईंलाई भेटेर खुशी लाग्यो।",Tamil:"நான் அலெக்ஸ். உங்களை சந்தித்ததில் மகிழ்ச்சி.",English:"I’m Alex. Nice to meet you."}},
+  {s:"B",e:"Nice to meet you too.",m:{Hindi:"मुझे भी आपसे मिलकर खुशी हुई।",Nepali:"मलाई पनि तपाईंलाई भेटेर खुशी लाग्यो।",Tamil:"உங்களையும் சந்தித்ததில் மகிழ்ச்சி.",English:"Nice to meet you too."}}
+ ],
+ speak:"Hello! What’s your name?",write:"Translate into English: मेरा नाम रवि है।",check:{q:"Choose the correct sentence.",options:["My name Ravi.","My name is Ravi.","I name is Ravi."],answer:1}
+},
+{
+ level:"Foundation",title:"I am / You are",objective:"Use I am, you are, he is and she is in simple daily sentences.",
+ teaching:[
+  {word:"I",pron:"EYE",mean:{Hindi:"मैं",Nepali:"म",Tamil:"நான்",English:"The person speaking"},sentence:"I am ready.",sentenceMean:{Hindi:"मैं तैयार हूँ।",Nepali:"म तयार छु।",Tamil:"நான் தயாராக இருக்கிறேன்.",English:"I am ready."},context:"I am at home.",contextMean:{Hindi:"मैं घर पर हूँ।",Nepali:"म घरमा छु।",Tamil:"நான் வீட்டில் இருக்கிறேன்.",English:"I am at home."}},
+  {word:"You",pron:"YOO",mean:{Hindi:"आप / तुम",Nepali:"तपाईं / तिमी",Tamil:"நீங்கள் / நீ",English:"The person I am talking to"},sentence:"You are ready.",sentenceMean:{Hindi:"आप तैयार हैं।",Nepali:"तपाईं तयार हुनुहुन्छ।",Tamil:"நீங்கள் தயாராக இருக்கிறீர்கள்.",English:"You are ready."},context:"You are at home.",contextMean:{Hindi:"आप घर पर हैं।",Nepali:"तपाईं घरमा हुनुहुन्छ।",Tamil:"நீங்கள் வீட்டில் இருக்கிறீர்கள்.",English:"You are at home."}},
+  {word:"He",pron:"HEE",mean:{Hindi:"वह (पुरुष)",Nepali:"उनी (पुरुष)",Tamil:"அவர் / அவன்",English:"A male person"},sentence:"He is busy.",sentenceMean:{Hindi:"वह व्यस्त है।",Nepali:"उनी व्यस्त हुनुहुन्छ।",Tamil:"அவர் பிஸியாக இருக்கிறார்.",English:"He is busy."},context:"He is at work.",contextMean:{Hindi:"वह काम पर है।",Nepali:"उनी काममा हुनुहुन्छ।",Tamil:"அவர் வேலையில் இருக்கிறார்.",English:"He is at work."}},
+  {word:"She",pron:"SHEE",mean:{Hindi:"वह (महिला)",Nepali:"उनी (महिला)",Tamil:"அவர் / அவள்",English:"A female person"},sentence:"She is happy.",sentenceMean:{Hindi:"वह खुश है।",Nepali:"उनी खुशी हुनुहुन्छ।",Tamil:"அவர் மகிழ்ச்சியாக இருக்கிறார்.",English:"She is happy."},context:"She is at home.",contextMean:{Hindi:"वह घर पर है।",Nepali:"उनी घरमा हुनुहुन्छ।",Tamil:"அவர் வீட்டில் இருக்கிறார்.",English:"She is at home."}}
+ ],
+ conversation:[
+  {s:"A",e:"Are you ready?",m:{Hindi:"क्या आप तैयार हैं?",Nepali:"के तपाईं तयार हुनुहुन्छ?",Tamil:"நீங்கள் தயாரா?",English:"Are you ready?"}},
+  {s:"B",e:"Yes, I am ready.",m:{Hindi:"हाँ, मैं तैयार हूँ।",Nepali:"हो, म तयार छु।",Tamil:"ஆம், நான் தயாராக இருக்கிறேன்.",English:"Yes, I am ready."}},
+  {s:"A",e:"Is he busy?",m:{Hindi:"क्या वह व्यस्त है?",Nepali:"के उनी व्यस्त हुनुहुन्छ?",Tamil:"அவர் பிஸியாக இருக்கிறாரா?",English:"Is he busy?"}},
+  {s:"B",e:"Yes, he is busy.",m:{Hindi:"हाँ, वह व्यस्त है।",Nepali:"हो, उनी व्यस्त हुनुहुन्छ।",Tamil:"ஆம், அவர் பிஸியாக இருக்கிறார்.",English:"Yes, he is busy."}}
+ ],
+ speak:"I am ready. You are ready.",write:"Translate into English: मैं घर पर हूँ।",check:{q:"Choose the correct sentence.",options:["I are ready.","I am ready.","I is ready."],answer:1}
+},
+{
+ level:"Foundation",title:"Daily Words: Home & Routine",objective:"Learn common words you use every day at home.",
+ teaching:[
+  {word:"Home",pron:"HOHM",mean:{Hindi:"घर",Nepali:"घर",Tamil:"வீடு",English:"The place where you live"},sentence:"I am at home.",sentenceMean:{Hindi:"मैं घर पर हूँ।",Nepali:"म घरमा छु।",Tamil:"நான் வீட்டில் இருக்கிறேன்.",English:"I am at home."},context:"I go home after work.",contextMean:{Hindi:"मैं काम के बाद घर जाता हूँ।",Nepali:"म कामपछि घर जान्छु।",Tamil:"நான் வேலைக்குப் பிறகு வீட்டிற்கு செல்கிறேன்.",English:"I go home after work."}},
+  {word:"Work",pron:"WURK",mean:{Hindi:"काम",Nepali:"काम",Tamil:"வேலை",English:"Job or activity you do"},sentence:"I go to work.",sentenceMean:{Hindi:"मैं काम पर जाता हूँ।",Nepali:"म काममा जान्छु।",Tamil:"நான் வேலைக்குச் செல்கிறேன்.",English:"I go to work."},context:"I am at work.",contextMean:{Hindi:"मैं काम पर हूँ।",Nepali:"म काममा छु।",Tamil:"நான் வேலையில் இருக்கிறேன்.",English:"I am at work."}},
+  {word:"Water",pron:"WAW-ter",mean:{Hindi:"पानी",Nepali:"पानी",Tamil:"தண்ணீர்",English:"A drink"},sentence:"I need water.",sentenceMean:{Hindi:"मुझे पानी चाहिए।",Nepali:"मलाई पानी चाहिन्छ।",Tamil:"எனக்கு தண்ணீர் வேண்டும்.",English:"I need water."},context:"Can I have some water?",contextMean:{Hindi:"क्या मुझे थोड़ा पानी मिल सकता है?",Nepali:"के म केही पानी पाउन सक्छु?",Tamil:"எனக்கு கொஞ்சம் தண்ணீர் கிடைக்குமா?",English:"Can I have some water?"}},
+  {word:"Food",pron:"FOOD",mean:{Hindi:"खाना",Nepali:"खाना",Tamil:"உணவு",English:"Something you eat"},sentence:"I need food.",sentenceMean:{Hindi:"मुझे खाना चाहिए।",Nepali:"मलाई खाना चाहिन्छ।",Tamil:"எனக்கு உணவு வேண்டும்.",English:"I need food."},context:"The food is good.",contextMean:{Hindi:"खाना अच्छा है।",Nepali:"खाना राम्रो छ।",Tamil:"உணவு நன்றாக இருக்கிறது.",English:"The food is good."}}
+ ],
+ conversation:[
+  {s:"A",e:"Are you at home?",m:{Hindi:"क्या आप घर पर हैं?",Nepali:"के तपाईं घरमा हुनुहुन्छ?",Tamil:"நீங்கள் வீட்டில் இருக்கிறீர்களா?",English:"Are you at home?"}},
+  {s:"B",e:"No. I am at work.",m:{Hindi:"नहीं। मैं काम पर हूँ।",Nepali:"होइन। म काममा छु।",Tamil:"இல்லை. நான் வேலையில் இருக்கிறேன்.",English:"No. I am at work."}},
+  {s:"A",e:"Do you need water?",m:{Hindi:"क्या आपको पानी चाहिए?",Nepali:"के तपाईंलाई पानी चाहिन्छ?",Tamil:"உங்களுக்கு தண்ணீர் வேண்டுமா?",English:"Do you need water?"}},
+  {s:"B",e:"Yes, please.",m:{Hindi:"हाँ, कृपया।",Nepali:"हो, कृपया।",Tamil:"ஆம், தயவுசெய்து.",English:"Yes, please."}}
+ ],
+ speak:"I need water. I am at home.",write:"Translate into English: मुझे पानी चाहिए।",check:{q:"What does “Home” mean?",options:["घर","काम","पानी"],answer:0}
+},
+{
+ level:"Foundation",title:"Daily English: Need, Want & Like",objective:"Build useful sentences for real daily needs.",
+ teaching:[
+  {word:"Need",pron:"NEED",mean:{Hindi:"ज़रूरत होना / चाहिए",Nepali:"चाहिनु",Tamil:"தேவை",English:"To require something"},sentence:"I need help.",sentenceMean:{Hindi:"मुझे मदद चाहिए।",Nepali:"मलाई मद्दत चाहिन्छ।",Tamil:"எனக்கு உதவி தேவை.",English:"I need help."},context:"I need some time.",contextMean:{Hindi:"मुझे थोड़ा समय चाहिए।",Nepali:"मलाई केही समय चाहिन्छ।",Tamil:"எனக்கு கொஞ்சம் நேரம் தேவை.",English:"I need some time."}},
+  {word:"Want",pron:"WONT",mean:{Hindi:"चाहना",Nepali:"चाहनु",Tamil:"வேண்டும் / விரும்பு",English:"To wish for something"},sentence:"I want tea.",sentenceMean:{Hindi:"मुझे चाय चाहिए।",Nepali:"मलाई चिया चाहिन्छ।",Tamil:"எனக்கு தேநீர் வேண்டும்.",English:"I want tea."},context:"I want to learn English.",contextMean:{Hindi:"मैं अंग्रेज़ी सीखना चाहता हूँ।",Nepali:"म अंग्रेजी सिक्न चाहन्छु।",Tamil:"நான் ஆங்கிலம் கற்க விரும்புகிறேன்.",English:"I want to learn English."}},
+  {word:"Like",pron:"LIKE",mean:{Hindi:"पसंद करना",Nepali:"मन पर्नु",Tamil:"விரும்பு / பிடிக்கும்",English:"To enjoy something"},sentence:"I like coffee.",sentenceMean:{Hindi:"मुझे कॉफी पसंद है।",Nepali:"मलाई कफी मन पर्छ।",Tamil:"எனக்கு காபி பிடிக்கும்.",English:"I like coffee."},context:"I like this place.",contextMean:{Hindi:"मुझे यह जगह पसंद है।",Nepali:"मलाई यो ठाउँ मन पर्छ।",Tamil:"எனக்கு இந்த இடம் பிடிக்கும்.",English:"I like this place."}}
+ ],
+ conversation:[
+  {s:"A",e:"Do you need help?",m:{Hindi:"क्या आपको मदद चाहिए?",Nepali:"के तपाईंलाई मद्दत चाहिन्छ?",Tamil:"உங்களுக்கு உதவி தேவையா?",English:"Do you need help?"}},
+  {s:"B",e:"Yes, please.",m:{Hindi:"हाँ, कृपया।",Nepali:"हो, कृपया।",Tamil:"ஆம், தயவுசெய்து.",English:"Yes, please."}},
+  {s:"A",e:"What do you want?",m:{Hindi:"आप क्या चाहते हैं?",Nepali:"तपाईं के चाहनुहुन्छ?",Tamil:"உங்களுக்கு என்ன வேண்டும்?",English:"What do you want?"}},
+  {s:"B",e:"I want some water.",m:{Hindi:"मुझे थोड़ा पानी चाहिए।",Nepali:"मलाई केही पानी चाहिन्छ।",Tamil:"எனக்கு கொஞ்சம் தண்ணீர் வேண்டும்.",English:"I want some water."}}
+ ],
+ speak:"I need help. I want to learn English.",write:"Translate into English: मुझे मदद चाहिए।",check:{q:"Choose the correct sentence.",options:["I need help.","I needs help.","I needing help."],answer:0}
+},
+{
+ level:"Foundation",title:"Shopping English",objective:"Ask about price, size and color in a shop.",
+ teaching:[
+  {word:"Price",pron:"PRICE",mean:{Hindi:"कीमत",Nepali:"मूल्य / भाउ",Tamil:"விலை",English:"How much something costs"},sentence:"What is the price?",sentenceMean:{Hindi:"कीमत क्या है?",Nepali:"मूल्य कति हो?",Tamil:"விலை என்ன?",English:"What is the price?"},context:"What is the price of this shirt?",contextMean:{Hindi:"इस शर्ट की कीमत क्या है?",Nepali:"यो शर्टको मूल्य कति हो?",Tamil:"இந்த சட்டையின் விலை என்ன?",English:"What is the price of this shirt?"}},
+  {word:"Size",pron:"SIZE",mean:{Hindi:"आकार / साइज़",Nepali:"साइज",Tamil:"அளவு",English:"How big or small something is"},sentence:"What size do you need?",sentenceMean:{Hindi:"आपको कौन सा साइज़ चाहिए?",Nepali:"तपाईंलाई कुन साइज चाहिन्छ?",Tamil:"உங்களுக்கு என்ன அளவு வேண்டும்?",English:"What size do you need?"},context:"Do you have a larger size?",contextMean:{Hindi:"क्या आपके पास बड़ा साइज़ है?",Nepali:"के तपाईंसँग ठूलो साइज छ?",Tamil:"உங்களிடம் பெரிய அளவு இருக்கிறதா?",English:"Do you have a larger size?"}},
+  {word:"Color",pron:"KUL-er",mean:{Hindi:"रंग",Nepali:"रंग",Tamil:"நிறம்",English:"The appearance of something"},sentence:"I like this color.",sentenceMean:{Hindi:"मुझे यह रंग पसंद है।",Nepali:"मलाई यो रंग मन पर्छ।",Tamil:"எனக்கு இந்த நிறம் பிடிக்கும்.",English:"I like this color."},context:"Do you have another color?",contextMean:{Hindi:"क्या आपके पास दूसरा रंग है?",Nepali:"के तपाईंसँग अर्को रंग छ?",Tamil:"உங்களிடம் வேறு நிறம் இருக்கிறதா?",English:"Do you have another color?"}}
+ ],
+ conversation:[
+  {s:"Customer",e:"How much is this shirt?",m:{Hindi:"यह शर्ट कितने की है?",Nepali:"यो शर्ट कति पर्छ?",Tamil:"இந்த சட்டை எவ்வளவு?",English:"How much is this shirt?"}},
+  {s:"Shop",e:"It is twenty dollars.",m:{Hindi:"यह बीस डॉलर की है।",Nepali:"यो बीस डलर पर्छ।",Tamil:"இது இருபது டாலர்.",English:"It is twenty dollars."}},
+  {s:"Customer",e:"Do you have a larger size?",m:{Hindi:"क्या आपके पास बड़ा साइज़ है?",Nepali:"के तपाईंसँग ठूलो साइज छ?",Tamil:"உங்களிடம் பெரிய அளவு இருக்கிறதா?",English:"Do you have a larger size?"}},
+  {s:"Shop",e:"Yes. Here you are.",m:{Hindi:"हाँ। यह लीजिए।",Nepali:"हो। लिनुहोस्।",Tamil:"ஆம். இதோ.",English:"Yes. Here you are."}}
+ ],
+ speak:"How much is this shirt?",write:"Translate into English: इसकी कीमत क्या है?",check:{q:"What does “Price” mean?",options:["कीमत","रंग","आकार"],answer:0}
+},
+{
+ level:"Foundation",title:"Time & Daily Routine",objective:"Talk about simple daily activities.",
+ teaching:[
+  {word:"Wake up",pron:"WAYK UP",mean:{Hindi:"जागना",Nepali:"ब्युँझनु",Tamil:"எழுந்திரு",English:"Stop sleeping"},sentence:"I wake up at seven.",sentenceMean:{Hindi:"मैं सात बजे उठता हूँ।",Nepali:"म सात बजे उठ्छु।",Tamil:"நான் ஏழு மணிக்கு எழுந்திருப்பேன்.",English:"I wake up at seven."},context:"I wake up early every day.",contextMean:{Hindi:"मैं हर दिन जल्दी उठता हूँ।",Nepali:"म हरेक दिन चाँडै उठ्छु।",Tamil:"நான் தினமும் சீக்கிரம் எழுந்திருப்பேன்.",English:"I wake up early every day."}},
+  {word:"Breakfast",pron:"BREK-fust",mean:{Hindi:"नाश्ता",Nepali:"बिहानको खाना / नास्ता",Tamil:"காலை உணவு",English:"The first meal of the day"},sentence:"I have breakfast at eight.",sentenceMean:{Hindi:"मैं आठ बजे नाश्ता करता हूँ।",Nepali:"म आठ बजे नास्ता गर्छु।",Tamil:"நான் எட்டு மணிக்கு காலை உணவு சாப்பிடுகிறேன்.",English:"I have breakfast at eight."},context:"Breakfast is ready.",contextMean:{Hindi:"नाश्ता तैयार है।",Nepali:"नास्ता तयार छ।",Tamil:"காலை உணவு தயாராக உள்ளது.",English:"Breakfast is ready."}},
+  {word:"Later",pron:"LAY-ter",mean:{Hindi:"बाद में",Nepali:"पछि",Tamil:"பிறகு",English:"After some time"},sentence:"I will call you later.",sentenceMean:{Hindi:"मैं आपको बाद में फोन करूँगा।",Nepali:"म तपाईंलाई पछि फोन गर्छु।",Tamil:"நான் உங்களை பிறகு அழைக்கிறேன்.",English:"I will call you later."},context:"See you later.",contextMean:{Hindi:"बाद में मिलते हैं।",Nepali:"पछि भेटौँला।",Tamil:"பிறகு சந்திப்போம்.",English:"See you later."}}
+ ],
+ conversation:[
+  {s:"A",e:"What time do you wake up?",m:{Hindi:"आप कितने बजे उठते हैं?",Nepali:"तपाईं कति बजे उठ्नुहुन्छ?",Tamil:"நீங்கள் எத்தனை மணிக்கு எழுந்திருப்பீர்கள்?",English:"What time do you wake up?"}},
+  {s:"B",e:"I wake up at seven.",m:{Hindi:"मैं सात बजे उठता हूँ।",Nepali:"म सात बजे उठ्छु।",Tamil:"நான் ஏழு மணிக்கு எழுந்திருப்பேன்.",English:"I wake up at seven."}},
+  {s:"A",e:"Do you have breakfast at home?",m:{Hindi:"क्या आप घर पर नाश्ता करते हैं?",Nepali:"के तपाईं घरमा नास्ता गर्नुहुन्छ?",Tamil:"நீங்கள் வீட்டில் காலை உணவு சாப்பிடுகிறீர்களா?",English:"Do you have breakfast at home?"}},
+  {s:"B",e:"Yes, I do.",m:{Hindi:"हाँ।",Nepali:"हो।",Tamil:"ஆம்.",English:"Yes, I do."}}
+ ],
+ speak:"I wake up at seven every day.",write:"Translate into English: मैं बाद में फोन करूँगा।",check:{q:"What does “Later” mean?",options:["अभी","बाद में","कल"],answer:1}
+},
+{
+ level:"Foundation",title:"Phone & Messages",objective:"Handle simple phone conversations.",
+ teaching:[
+  {word:"Call",pron:"KAWL",mean:{Hindi:"फोन करना",Nepali:"फोन गर्नु",Tamil:"அழைப்பு / தொலைபேசியில் அழை",English:"Talk to someone by phone"},sentence:"Call me later.",sentenceMean:{Hindi:"मुझे बाद में फोन करना।",Nepali:"मलाई पछि फोन गर्नु।",Tamil:"என்னை பிறகு அழைக்கவும்.",English:"Call me later."},context:"I will call you tonight.",contextMean:{Hindi:"मैं आपको आज रात फोन करूँगा।",Nepali:"म आज राति तपाईंलाई फोन गर्छु।",Tamil:"நான் இன்று இரவு உங்களை அழைக்கிறேன்.",English:"I will call you tonight."}},
+  {word:"Busy",pron:"BIZ-ee",mean:{Hindi:"व्यस्त",Nepali:"व्यस्त",Tamil:"பிஸி / வேலையில்",English:"Having something to do"},sentence:"I am busy now.",sentenceMean:{Hindi:"मैं अभी व्यस्त हूँ।",Nepali:"म अहिले व्यस्त छु।",Tamil:"நான் இப்போது பிஸியாக இருக்கிறேன்.",English:"I am busy now."},context:"Can I call you later? I am busy.",contextMean:{Hindi:"क्या मैं आपको बाद में फोन करूँ? मैं व्यस्त हूँ।",Nepali:"के म तपाईंलाई पछि फोन गरूँ? म व्यस्त छु।",Tamil:"நான் உங்களை பிறகு அழைக்கலாமா? நான் பிஸியாக இருக்கிறேன்.",English:"Can I call you later? I am busy."}},
+  {word:"Message",pron:"MES-ij",mean:{Hindi:"संदेश / मैसेज",Nepali:"सन्देश / मेसेज",Tamil:"செய்தி",English:"A written communication"},sentence:"Send me a message.",sentenceMean:{Hindi:"मुझे एक मैसेज भेजो।",Nepali:"मलाई सन्देश पठाउनुहोस्।",Tamil:"எனக்கு ஒரு செய்தி அனுப்புங்கள்.",English:"Send me a message."},context:"I got your message.",contextMean:{Hindi:"मुझे आपका मैसेज मिल गया।",Nepali:"मैले तपाईंको सन्देश पाएँ।",Tamil:"உங்கள் செய்தி எனக்கு கிடைத்தது.",English:"I got your message."}}
+ ],
+ conversation:[
+  {s:"A",e:"Can I call you now?",m:{Hindi:"क्या मैं आपको अभी फोन कर सकता हूँ?",Nepali:"के म तपाईंलाई अहिले फोन गर्न सक्छु?",Tamil:"நான் இப்போது உங்களை அழைக்கலாமா?",English:"Can I call you now?"}},
+  {s:"B",e:"Sorry, I am busy now.",m:{Hindi:"माफ़ कीजिए, मैं अभी व्यस्त हूँ।",Nepali:"माफ गर्नुहोस्, म अहिले व्यस्त छु।",Tamil:"மன்னிக்கவும், நான் இப்போது பிஸியாக இருக்கிறேன்.",English:"Sorry, I am busy now."}},
+  {s:"A",e:"Okay. I will call you later.",m:{Hindi:"ठीक है। मैं आपको बाद में फोन करूँगा।",Nepali:"ठीक छ। म तपाईंलाई पछि फोन गर्छु।",Tamil:"சரி. நான் உங்களை பிறகு அழைக்கிறேன்.",English:"Okay. I will call you later."}},
+  {s:"B",e:"Please send me a message.",m:{Hindi:"कृपया मुझे मैसेज भेजिए।",Nepali:"कृपया मलाई सन्देश पठाउनुहोस्।",Tamil:"தயவுசெய்து எனக்கு ஒரு செய்தி அனுப்புங்கள்.",English:"Please send me a message."}}
+ ],
+ speak:"Sorry, I am busy now. I will call you later.",write:"Translate into English: मुझे बाद में फोन करना।",check:{q:"Choose the correct sentence.",options:["Call me later.","Call I later.","Calls me later."],answer:0}
+}
+];
+
+const languages=[
+ {id:"Hindi",name:"Hindi",native:"हिन्दी"},
+ {id:"Nepali",name:"Nepali",native:"नेपाली"},
+ {id:"Tamil",name:"Tamil",native:"தமிழ்"},
+ {id:"English",name:"English",native:"English"}
+];
+
+const defaultState={lang:"Hindi",current:0,step:0,completed:[],xp:0,streak:0,lastDay:"",goal:15,speed:.9};
+let state=loadState();
+let speechRecognition=null;
+
+function loadState(){
+ try{
+  const x=JSON.parse(localStorage.getItem("englishJourneyState")||"null");
+  return x?Object.assign(defaultState,x):Object.assign({},defaultState);
+ }catch(e){return Object.assign({},defaultState)}
+}
+function save(){localStorage.setItem("englishJourneyState",JSON.stringify(state))}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function baseText(obj){return obj[state.lang]||obj.English}
+function speakText(text){
+ if(!("speechSynthesis" in window)){alert("Text-to-speech is not supported in this browser.");return}
+ speechSynthesis.cancel();
+ const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=Number(state.speed)||.9;speechSynthesis.speak(u);
+}
+function showView(id){
+ document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+ const el=document.getElementById(id);if(el)el.classList.add("active");
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.view===id));
+ document.getElementById("nav").classList.remove("open");
+ window.scrollTo({top:0,behavior:"smooth"});
+ if(id==="course")renderCourse();
+ if(id==="review")renderReview();
+ if(id==="progress")renderProgress();
+ if(id==="settings")renderSettings();
+}
+function updateHome(){
+ const l=lessons[state.current]||lessons[0], done=state.completed.length;
+ document.getElementById("heroLesson").textContent="Lesson "+(state.current+1)+": "+l.title;
+ document.getElementById("heroObjective").textContent=l.objective;
+ const pct=Math.round((done/lessons.length)*100);
+ document.getElementById("heroProgress").style.width=pct+"%";
+ document.getElementById("heroProgressText").textContent=pct+"% foundation complete";
+ document.getElementById("xpStat").textContent=state.xp;
+ document.getElementById("streakStat").textContent=state.streak;
+ document.getElementById("doneStat").textContent=done;
+ document.getElementById("levelStat").textContent=l.level;
+ renderLanguageGrid("languageGrid");
+}
+function renderLanguageGrid(id){
+ const root=document.getElementById(id);if(!root)return;
+ root.innerHTML=languages.map(l=>`<button class="lang ${state.lang===l.id?"active":""}" data-lang="${l.id}"><strong>${l.name}</strong><br><small>${l.native}</small></button>`).join("");
+ root.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{state.lang=b.dataset.lang;save();updateHome();renderSettings();renderCourse();if(document.getElementById("lesson").classList.contains("active"))renderLesson()});
+}
+function renderCourse(){
+ const root=document.getElementById("courseList");
+ root.innerHTML=lessons.map((l,i)=>{
+  const done=state.completed.includes(i), unlocked=i===0||state.completed.includes(i-1);
+  return `<div class="lesson-row ${done?"done":""} ${unlocked?"":"locked"}">
+   <div class="lesson-num">${done?"✓":i+1}</div><div class="lesson-info"><strong>${esc(l.title)}</strong><span>${esc(l.objective)}</span></div>
+   <button class="${unlocked?"primary":"ghost"}" ${unlocked?`data-open="${i}"`:"disabled"}>${done?"Review":"Start"} ${unlocked?"→":"🔒"}</button>
+  </div>`;
+ }).join("");
+ root.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>startLesson(Number(b.dataset.open)));
+ document.getElementById("courseFoundationProgress").style.width=Math.round(state.completed.length/lessons.length*100)+"%";
+}
+function startLesson(i){
+ if(i>0&&!state.completed.includes(i-1)&&!state.completed.includes(i)){alert("Complete the previous lesson first.");return}
+ state.current=i;state.step=0;save();renderLesson();showView("lesson");
+}
+function renderLesson(){
+ const l=lessons[state.current]||lessons[0], steps=["Learn","Understand","Listen","Speak","Conversation","Write","Check","Complete"];
+ document.getElementById("lessonCounter").textContent="Lesson "+(state.current+1)+" / "+lessons.length;
+ document.getElementById("lessonSteps").innerHTML=steps.map((s,i)=>`<i class="${i<=state.step?"on":""}" title="${s}"></i>`).join("");
+ const card=document.getElementById("lessonCard");
+ const item=l.teaching[Math.min(Math.floor(state.step/2),l.teaching.length-1)];
+ if(state.step===0) card.innerHTML=`<div class="step-label">Step 1 • Learn</div><h2>${esc(l.title)}</h2><p>${esc(l.objective)}</p><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><div class="teach-word">${esc(item.word)}</div><div class="pron">🔊 ${esc(item.pron)}</div><div class="meaning"><b>Meaning</b><br>${esc(baseText(item.mean))}</div><div class="actions"><button class="primary" data-listen="${esc(item.word)}">🔊 Listen</button><button class="primary" id="nextLessonStep">Continue →</button></div>`;
+ else if(state.step===1) card.innerHTML=`<div class="step-label">Step 2 • Understand</div><h2>Use “${esc(item.word)}”</h2><div class="meaning"><b>${esc(baseText(item.mean))}</b><br>English: ${esc(item.word)}</div><div class="example"><strong>${esc(item.sentence)}</strong><small>${esc(baseText(item.sentenceMean))}</small></div><div class="example"><strong>${esc(item.context)}</strong><small>${esc(baseText(item.contextMean))}</small></div><div class="actions"><button class="primary" data-listen="${esc(item.sentence)}">🔊 Listen to sentence</button><button class="primary" id="nextLessonStep">Continue →</button></div>`;
+ else if(state.step===2) card.innerHTML=`<div class="step-label">Step 3 • Listen</div><h2>Listen and notice</h2><p>Listen to the sentence two times. Try to notice the word you just learned.</p><div class="speak-target">${esc(item.sentence)}</div><div class="actions"><button class="primary" data-listen="${esc(item.sentence)}">🔊 Play English</button><button class="secondary" data-listen="${esc(item.context)}">🔊 Second example</button><button class="primary" id="nextLessonStep">I understand →</button></div>`;
+ else if(state.step===3) card.innerHTML=`<div class="step-label">Step 4 • Speak</div><h2>Say it aloud</h2><p>Listen once, then repeat naturally. Your browser can check the words you said.</p><div class="speak-target">${esc(l.speak)}</div><div class="actions"><button class="secondary" data-listen="${esc(l.speak)}">🔊 Listen</button><button class="primary" id="lessonMic">🎙 Speak</button><button class="primary" id="nextLessonStep">Continue →</button></div><div id="lessonSpeech" style="margin-top:12px;color:var(--muted)">Ready.</div>`;
+ else if(state.step===4) card.innerHTML=`<div class="step-label">Step 5 • Conversation</div><h2>See English in a real conversation</h2><p>Read both sides. Notice how the words become useful in a normal situation.</p><div class="dialogue">${l.conversation.map(x=>`<div class="bubble ${x.s==="B"||x.s==="Customer"?"me":""}"><b>${esc(x.s)}:</b> ${esc(x.e)}<small style="display:block;color:var(--muted);margin-top:4px">${esc(baseText(x.m))}</small></div>`).join("")}</div><div class="actions"><button class="primary" id="nextLessonStep">Continue to writing →</button></div>`;
+ else if(state.step===5) card.innerHTML=`<div class="step-label">Step 6 • Writing</div><h2>Build the sentence yourself</h2><p>${esc(l.write)}</p><input class="big-input" id="lessonWrite" placeholder="Type your English answer..."><div class="actions"><button class="primary" id="checkWriting">Check answer</button></div><div id="writeFeedback"></div>`;
+ else if(state.step===6) card.innerHTML=`<div class="step-label">Step 7 • Check</div><h2>${esc(l.check.q)}</h2><div class="check-options">${l.check.options.map((o,i)=>`<button data-answer="${i}">${esc(o)}</button>`).join("")}</div><div id="checkFeedback"></div>`;
+ else card.innerHTML=`<div class="step-label">Lesson complete</div><h2>🎉 You finished Lesson ${state.current+1}</h2><p>You learned the lesson before practicing it. Keep going one lesson at a time.</p><div class="meaning"><b>Next:</b> ${state.current<lessons.length-1?esc(lessons[state.current+1].title):"Foundation Review"}</div><div class="actions"><button class="primary" id="nextLesson">${state.current<lessons.length-1?"Next Lesson →":"Go to Review →"}</button><button class="secondary" id="courseFromLesson">Course</button></div>`;
+ bindLessonEvents();
+}
+function bindLessonEvents(){
+ document.querySelectorAll("[data-listen]").forEach(b=>b.onclick=()=>speakText(b.dataset.listen));
+ const next=document.getElementById("nextLessonStep");if(next)next.onclick=()=>{state.step=Math.min(state.step+1,7);save();renderLesson()};
+ const cw=document.getElementById("checkWriting");if(cw)cw.onclick=()=>{
+  const input=(document.getElementById("lessonWrite").value||"").trim().toLowerCase();
+  const targets=["my name is ravi","i am at home","i need water","i need help","what is the price","i will call you later","call me later"];
+  const ok=targets.some(t=>input.replace(/[.!?,]/g,"").includes(t))||input.length>=8;
+  document.getElementById("writeFeedback").innerHTML=`<div class="feedback ${ok?"good":"bad"}">${ok?"Good! Your English sentence is understandable.":"Try again. Look at the lesson examples and type a complete English sentence."}</div>`;
+  if(ok)setTimeout(()=>{state.step=6;save();renderLesson()},700);
+ };
+ document.querySelectorAll("[data-answer]").forEach(b=>b.onclick=()=>{
+  const correct=Number(b.dataset.answer)===(lessons[state.current].check.answer);
+  const box=document.getElementById("checkFeedback");
+  box.innerHTML=`<div class="feedback ${correct?"good":"bad"}">${correct?"Correct! You understood the lesson.":"Not quite. Read the examples once more and choose again."}</div>`;
+  if(correct){state.xp+=10;if(!state.completed.includes(state.current))state.completed.push(state.current);state.step=7;save();setTimeout(renderLesson,650)}
+ });
+ const nextLesson=document.getElementById("nextLesson");if(nextLesson)nextLesson.onclick=()=>{
+  if(state.current<lessons.length-1){state.current++;state.step=0;save();renderLesson()}else showView("review");
+ };
+ const c=document.getElementById("courseFromLesson");if(c)c.onclick=()=>showView("course");
+ const mic=document.getElementById("lessonMic");if(mic)mic.onclick=()=>startRecognition(l.speak,document.getElementById("lessonSpeech"));
+}
+function startRecognition(target,statusEl){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){statusEl.innerHTML='<div class="notice">Speech recognition is not available in this browser. Try Chrome or Edge.</div>';return}
+ if(speechRecognition){try{speechRecognition.stop()}catch(e){}}
+ speechRecognition=new SR();speechRecognition.lang="en-US";speechRecognition.interimResults=false;speechRecognition.maxAlternatives=1;
+ statusEl.textContent="Listening… speak now.";
+ speechRecognition.onresult=e=>{
+  const spoken=e.results[0][0].transcript;
+  const a=spoken.toLowerCase().replace(/[^\w\s]/g,"").split(/\s+/), b=target.toLowerCase().replace(/[^\w\s]/g,"").split(/\s+/);
+  const set=new Set(a);const hits=b.filter(w=>set.has(w)).length;const score=Math.round(hits/b.length*100);
+  statusEl.innerHTML=`<div class="feedback ${score>=60?"good":"bad"}">You said: “${esc(spoken)}”<br>Basic word match: ${score}%</div>`;
+ };
+ speechRecognition.onerror=e=>statusEl.textContent="Could not hear you. Please try again.";
+ speechRecognition.start();
+}
+function renderReview(){
+ const root=document.getElementById("reviewContent");
+ if(state.completed.length<2){root.innerHTML=`<div class="card"><h3>Review unlocks after 2 lessons</h3><p>Finish two lessons first. The app will then bring earlier words and sentences back for spaced review.</p><button class="primary" onclick="startLesson(0)">Start learning →</button></div>`;return}
+ const items=[];state.completed.forEach(i=>lessons[i].teaching.forEach(x=>items.push(x)));
+ root.innerHTML=`<div class="grid">${items.slice(0,12).map(x=>`<div class="card"><div class="pill">WORD</div><h2>${esc(x.word)}</h2><p>${esc(baseText(x.mean))}</p><p><b>${esc(x.sentence)}</b></p><button class="secondary" data-review-listen="${esc(x.sentence)}">🔊 Listen</button></div>`).join("")}</div>`;
+ root.querySelectorAll("[data-review-listen]").forEach(b=>b.onclick=()=>speakText(b.dataset.reviewListen));
+}
+function renderProgress(){
+ const pct=Math.round(state.completed.length/lessons.length*100);
+ document.getElementById("progressCards").innerHTML=[
+  ["Lessons completed",state.completed.length+" / "+lessons.length],
+  ["XP",state.xp],
+  ["Streak",state.streak+" days"]
+ ].map(x=>`<div class="card"><div class="pill">PROGRESS</div><h2>${esc(x[1])}</h2><p>${esc(x[0])}</p></div>`).join("");
+ document.getElementById("progressBar").style.width=pct+"%";document.getElementById("progressText").textContent=pct+"% of the foundation course completed.";
+}
+function renderSettings(){
+ renderLanguageGrid("settingsLanguageGrid");
+ document.getElementById("goalSelect").value=state.goal;
+ document.getElementById("speedRange").value=state.speed;
+ document.getElementById("speedValue").textContent=Number(state.speed).toFixed(1)+"×";
+}
+function init(){
+ document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+ document.getElementById("menuBtn").onclick=()=>document.getElementById("nav").classList.toggle("open");
+ document.getElementById("continueBtn").onclick=()=>startLesson(state.current);
+ document.getElementById("courseBtn").onclick=()=>showView("course");
+ document.getElementById("backCourse").onclick=()=>showView("course");
+ document.getElementById("translatorBtn");
+ document.getElementById("translateBtn").onclick=translate;
+ document.getElementById("clearTranslator").onclick=()=>{document.getElementById("translateInput").value="";document.getElementById("translateOutput").value=""};
+ document.getElementById("speakTranslation").onclick=()=>speakText(document.getElementById("translateOutput").value||"");
+ document.getElementById("listenSpeak").onclick=()=>speakText(document.getElementById("speakTarget").textContent);
+ document.getElementById("startSpeak").onclick=()=>startRecognition(document.getElementById("speakTarget").textContent,document.getElementById("speechStatus"));
+ document.getElementById("goalSelect").onchange=e=>{state.goal=Number(e.target.value);save()};
+ document.getElementById("speedRange").oninput=e=>{state.speed=Number(e.target.value);document.getElementById("speedValue").textContent=state.speed.toFixed(1)+"×";save()};
+ document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset all English Journey progress?")){localStorage.removeItem("englishJourneyState");state=loadState();updateHome();renderCourse();renderSettings();renderProgress();showView("home")}};
+ updateHome();renderCourse();renderSettings();renderProgress();renderReview();
+}
+function translate(){
+ const q=document.getElementById("translateInput").value.trim().toLowerCase(), mode=document.getElementById("translatorMode").value;
+ const out=document.getElementById("translateOutput");
+ if(!q){out.value="";return}
+ let found=null;
+ lessons.forEach(l=>l.teaching.forEach(x=>{
+  const candidates=[x.word,x.sentence,x.context];
+  candidates.forEach(c=>{
+   if(c.toLowerCase()===q)found=mode==="baseToEnglish"?c:baseText(x.mean);
+   if(mode==="englishToBase"&&c.toLowerCase()===q)found=baseText(x.mean);
+  });
+  if(mode==="baseToEnglish"&&baseText(x.mean).toLowerCase()===q)found=x.word;
+ }));
+ out.value=found||"Not found in the offline course phrase bank. Try a phrase from your lessons.";
+}
+window.startLesson=startLesson;
+document.addEventListener("DOMContentLoaded",init);
+})();
+</script>
+</body>
+</html>
